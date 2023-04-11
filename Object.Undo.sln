@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Object.Undo", "Object.Undo\Object.Undo.csproj", "{5B05AA82-6F00-436D-83CD-97A889A2810F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Object.Undo.Tests", "Object.Undo.Tests\Object.Undo.Tests.csproj", "{60A8007F-1341-4C53-9542-E99D0BD5506C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B05AA82-6F00-436D-83CD-97A889A2810F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B05AA82-6F00-436D-83CD-97A889A2810F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B05AA82-6F00-436D-83CD-97A889A2810F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B05AA82-6F00-436D-83CD-97A889A2810F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60A8007F-1341-4C53-9542-E99D0BD5506C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60A8007F-1341-4C53-9542-E99D0BD5506C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60A8007F-1341-4C53-9542-E99D0BD5506C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60A8007F-1341-4C53-9542-E99D0BD5506C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
