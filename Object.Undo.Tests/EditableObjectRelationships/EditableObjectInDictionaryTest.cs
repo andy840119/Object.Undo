@@ -35,7 +35,7 @@ public class EditableObjectInDictionaryTest : BaseEditableObjectRelationshipTest
                 { new DictionaryKey(), child }
             }
         };
-        AssertRelationShip(parent, child, "[Children2, key:Object.Undo.Tests.EditableObjectRelationships.EditableClassObjectRelationshipTest+DictionaryClassKey]");
+        AssertRelationShip(parent, child, "[Children2, key:Object.Undo.Tests.EditableObjectRelationships.EditableObjectInDictionaryTest+DictionaryKey]");
     }
 
     [Test]
@@ -65,7 +65,7 @@ public class EditableObjectInDictionaryTest : BaseEditableObjectRelationshipTest
                 { child, new Child() }
             }
         };
-        AssertRelationShip(parent, child, "[Children4, value:Object.Undo.Tests.EditableObjectRelationships.EditableClassObjectRelationshipTest+ChildClass]");
+        AssertRelationShip(parent, child, "[Children4, value:Object.Undo.Tests.EditableObjectRelationships.BaseEditableObjectRelationshipTest+Child]");
     }
 
     private class ParentWithChildDictionary : IEditableObject
