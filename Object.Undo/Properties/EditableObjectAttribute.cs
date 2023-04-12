@@ -14,6 +14,8 @@ namespace Object.Undo.Properties;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 public class EditableObjectAttribute : Attribute
 {
+    private readonly Guid guid = Guid.NewGuid();
+
     /// <summary>
     /// Get the <see cref="EditableObjectAttribute"/> in the class.
     /// Also note that on object should only have one <see cref="EditableObjectAttribute"/>.
@@ -22,4 +24,22 @@ public class EditableObjectAttribute : Attribute
     /// <returns></returns>
     public static EditableObjectAttribute? GetEditableObjectAttribute(object editableObject)
         => editableObject.GetType().GetCustomAttributes<EditableObjectAttribute>().SingleOrDefault();
+
+    public override bool Equals(object obj)
+    {
+        if (obj is EditableObjectAttribute attribute)
+            return equals(attribute);
+
+        return false;
+    }
+
+    private bool equals(EditableObjectAttribute other)
+    {
+        return base.Equals(other) && guid.Equals(other.guid);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(base.GetHashCode(), guid);
+    }
 }
