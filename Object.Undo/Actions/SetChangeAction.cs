@@ -14,7 +14,7 @@ public class SetChangeAction<TProperty> : CollectionAddOrRemoveAction<TProperty>
 {
 
     public SetChangeAction(IEditableObject editableObject, string propertyName, TProperty value, CollectionChangeActionType actionType)
-        : this(editableObject, propertyName, new [] {value }, actionType)
+        : base(editableObject, propertyName, value, actionType)
     {
     }
 
