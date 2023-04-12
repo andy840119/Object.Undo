@@ -32,10 +32,10 @@ public class EditableObjectInPropertyTest : BaseEditableObjectRelationshipTest
 
     private class ParentWithChildProperty : IEditableObject
     {
-        [EditableProperty]
+        [ChildEditableObject]
         public Child? Child1 { get; set; }
 
-        [EditableProperty]
+        [ChildEditableObject]
         public IEditableObject? Child2 { get; set; }
 
         public Guid Id { get; } = Guid.NewGuid();

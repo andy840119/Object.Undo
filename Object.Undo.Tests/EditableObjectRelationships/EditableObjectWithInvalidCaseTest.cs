@@ -32,7 +32,7 @@ public class EditableObjectWithInvalidCaseTest : BaseEditableObjectRelationshipT
 
     private class ParentWithChildProperty : IEditableObject
     {
-        [EditableProperty]
+        [ChildEditableObject]
         public Child? Child1 { get; set; }
 
         public Guid Id { get; } = Guid.NewGuid();

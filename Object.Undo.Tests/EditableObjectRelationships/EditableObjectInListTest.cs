@@ -40,10 +40,10 @@ public class EditableObjectInListTest : BaseEditableObjectRelationshipTest
 
     private class ParentWithChildList : IEditableObject
     {
-        [EditableProperty]
+        [ChildEditableObject]
         public IList<Child>? Children1 { get; set; }
 
-        [EditableProperty]
+        [ChildEditableObject]
         public IList<IEditableObject>? Children2 { get; set; }
 
         public Guid Id { get; } = Guid.NewGuid();

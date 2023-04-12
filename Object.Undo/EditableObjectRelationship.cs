@@ -58,7 +58,7 @@ public class EditableObjectRelationship
         return null;
 
         static IEnumerable<PropertyInfo> getEditableProperties(object parent)
-            => parent.GetType().GetProperties().Where(x => Attribute.IsDefined(x,typeof(EditablePropertyAttribute)));
+            => parent.GetType().GetProperties().Where(x => Attribute.IsDefined(x,typeof(ChildEditableObjectAttribute)));
     }
 
     private static Stack<Layer>? findLayerInProperty(string propertyName, IEditableObject propertyValue, IEditableObject target)
