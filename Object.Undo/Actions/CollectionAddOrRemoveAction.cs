@@ -11,20 +11,35 @@ namespace Object.Undo.Actions;
 /// <summary>
 /// Use this class to add/remove the object without set the property.
 /// </summary>
-/// <typeparam name="TProperty"></typeparam>
-public abstract class CollectionAddOrRemoveAction<TProperty> : PropertyChangeAction<IEnumerable<TProperty>>
+/// <typeparam name="TValue"></typeparam>
+public abstract class CollectionAddOrRemoveAction<TValue> : ChangeAction<IEnumerable<TValue>>
 {
+    private IEnumerable<TValue> values = Array.Empty<TValue>();
     private readonly CollectionChangeActionType actionType;
 
-    protected CollectionAddOrRemoveAction(IEditableObject editableObject, string propertyName, IEnumerable<TProperty> values, CollectionChangeActionType actionType)
+    protected CollectionAddOrRemoveAction(IEditableObject editableObject, string propertyName, TValue value, CollectionChangeActionType actionType)
+        : this(editableObject, propertyName, new [] { value }, actionType)
+    {
+    }
+
+    protected CollectionAddOrRemoveAction(IEditableObject editableObject, string propertyName, IEnumerable<TValue> values, CollectionChangeActionType actionType)
         : base(editableObject, propertyName, values)
     {
         this.actionType = actionType;
     }
 
-    protected sealed override void Undo(IEditableObject editableObject, PropertyInfo propertyInfo, IEnumerable<TProperty>? property)
+    protected sealed override void BackupValue(IEnumerable<TValue> oldValue, IEnumerable<TValue> newValue)
     {
-        if (propertyInfo.GetValue(editableObject) is not ICollection<TProperty> collection)
+        values = newValue;
+    }
+
+    protected sealed override IEnumerable<TValue> GetUndoValue() => values;
+
+    protected sealed override IEnumerable<TValue> GetRedoValue() => values;
+
+    protected sealed override void Undo(IEditableObject editableObject, PropertyInfo propertyInfo, IEnumerable<TValue>? property)
+    {
+        if (propertyInfo.GetValue(editableObject) is not ICollection<TValue> collection)
             throw new InvalidOperationException("Property from the getter should not be null.");
 
         if (property == null)
@@ -45,9 +60,9 @@ public abstract class CollectionAddOrRemoveAction<TProperty> : PropertyChangeAct
         }
     }
 
-    protected sealed override void Redo(IEditableObject editableObject, PropertyInfo propertyInfo, IEnumerable<TProperty>? property)
+    protected sealed override void Redo(IEditableObject editableObject, PropertyInfo propertyInfo, IEnumerable<TValue>? property)
     {
-        if (propertyInfo.GetValue(editableObject) is not ICollection<TProperty> collection)
+        if (propertyInfo.GetValue(editableObject) is not ICollection<TValue> collection)
             throw new InvalidOperationException("Property from the getter should not be null.");
 
         if (property == null)
@@ -73,7 +88,7 @@ public abstract class CollectionAddOrRemoveAction<TProperty> : PropertyChangeAct
     /// </summary>
     /// <param name="collection"></param>
     /// <param name="items"></param>
-    protected virtual void AddRange(ICollection<TProperty> collection, IEnumerable<TProperty> items)
+    protected virtual void AddRange(ICollection<TValue> collection, IEnumerable<TValue> items)
     {
         foreach (var item in items)
         {
@@ -86,7 +101,7 @@ public abstract class CollectionAddOrRemoveAction<TProperty> : PropertyChangeAct
     /// </summary>
     /// <param name="collection"></param>
     /// <param name="items"></param>
-    protected virtual void RemoveRange(ICollection<TProperty> collection, IEnumerable<TProperty> items)
+    protected virtual void RemoveRange(ICollection<TValue> collection, IEnumerable<TValue> items)
     {
         foreach (var item in items)
         {
