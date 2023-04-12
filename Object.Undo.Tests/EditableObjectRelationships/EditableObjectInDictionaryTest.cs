@@ -70,16 +70,16 @@ public class EditableObjectInDictionaryTest : BaseEditableObjectRelationshipTest
 
     private class ParentWithChildDictionary : IEditableObject
     {
-        [EditableProperty]
+        [ChildEditableObject]
         public IDictionary<string, Child>? Children1 { get; set; }
 
-        [EditableProperty]
+        [ChildEditableObject]
         public IDictionary<DictionaryKey, Child>? Children2 { get; set; }
 
-        [EditableProperty]
+        [ChildEditableObject]
         public IDictionary<Child, string>? Children3 { get; set; }
 
-        [EditableProperty]
+        [ChildEditableObject]
         public IDictionary<Child, Child>? Children4 { get; set; }
 
         public Guid Id { get; } = Guid.NewGuid();

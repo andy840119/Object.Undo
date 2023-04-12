@@ -7,12 +7,11 @@ using Object.Undo.Interfaces;
 namespace Object.Undo.Properties;
 
 /// <summary>
-/// Should add this attribute to the property that able to be edited.
-/// Means the property in the class can be undo/redo.
-/// Note that the class should add the <see cref="IEditableObject"/>
+/// Should add this attribute to the property that container the <see cref="IEditableObject"/>.
+/// Note that the parent class should inherit the <see cref="IEditableObject"/>
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
 
-public class EditablePropertyAttribute: Attribute
+public class ChildEditableObjectAttribute: Attribute
 {
 }
