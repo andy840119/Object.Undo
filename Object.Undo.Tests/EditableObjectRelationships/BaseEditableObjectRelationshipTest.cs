@@ -26,4 +26,9 @@ public class BaseEditableObjectRelationshipTest
             Assert.IsTrue(EditableObjectUtils.IsSameInstance(child, actual));
         }
     }
+
+    protected class Child : IEditableObject
+    {
+        public Guid Id { get; } = Guid.NewGuid();
+    }
 }
