@@ -8,20 +8,20 @@ namespace Object.Undo.Tests.Actions;
 
 public abstract class BasePropertyChangeActionTest
 {
-    protected void AssertUndoRedoPropertyInClass<T>(ChangeAction<T> action, Func<T> getPropertyAction)
+    protected void AssertUndoRedoPropertyInClass<TProperty, TValue>(ChangeAction<TProperty> action, Func<TValue> getValueAction)
     {
-        // should test the value changed to the old value.
         action.Undo();
-        Assert.AreEqual(GetUndoValue(action), getPropertyAction());
+        AssertValue(GetUndoValue<TProperty, TValue>(action), getValueAction());
 
-        // should test the value changed to the new value.
         action.Redo();
-        Assert.AreEqual(GetRedoValue(action), getPropertyAction());
+        AssertValue(GetRedoValue<TProperty, TValue>(action), getValueAction());
     }
 
-    protected abstract T GetUndoValue<T>(ChangeAction<T> action);
+    protected abstract TValue? GetUndoValue<TProperty, TValue>(ChangeAction<TProperty> action);
 
-    protected abstract T GetRedoValue<T>(ChangeAction<T> action);
+    protected abstract TValue? GetRedoValue<TProperty, TValue>(ChangeAction<TProperty> action);
+
+    protected abstract void AssertValue<TValue>(TValue expected, TValue actual);
 
     protected interface IStruct
     {
