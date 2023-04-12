@@ -16,7 +16,7 @@ public class SetChangeActionTest : BasePropertyChangeActionTest
             Strings = new HashSet<string> { "test" },
         };
 
-        var action = new SetChangeAction<string>(obj, nameof(EditableObjectWithSet.Strings), "test2", CollectionChangeActionType.Add);
+        var action = new TestSetChangeAction<string>(obj, nameof(EditableObjectWithSet.Strings), "test2", CollectionChangeActionType.Add);
         AssertUndoRedoPropertyInClass(action, () => obj.Strings);
     }
 
@@ -28,7 +28,7 @@ public class SetChangeActionTest : BasePropertyChangeActionTest
             Interfaces = new HashSet<IStruct> { new Struct() },
         };
 
-        var action = new SetChangeAction<IStruct>(obj, nameof(EditableObjectWithSet.Interfaces), new Struct(), CollectionChangeActionType.Add);
+        var action = new TestSetChangeAction<IStruct>(obj, nameof(EditableObjectWithSet.Interfaces), new Struct(), CollectionChangeActionType.Add);
         AssertUndoRedoPropertyInClass(action, () => obj.Interfaces);
     }
 
@@ -40,7 +40,7 @@ public class SetChangeActionTest : BasePropertyChangeActionTest
             Structs = new HashSet<Struct> { new() },
         };
 
-        var action = new SetChangeAction<Struct>(obj, nameof(EditableObjectWithSet.Structs), new Struct(), CollectionChangeActionType.Add);
+        var action = new TestSetChangeAction<Struct>(obj, nameof(EditableObjectWithSet.Structs), new Struct(), CollectionChangeActionType.Add);
         AssertUndoRedoPropertyInClass(action, () => obj.Structs);
     }
 
@@ -52,7 +52,7 @@ public class SetChangeActionTest : BasePropertyChangeActionTest
             EditableObjects = new HashSet<EditableObject> { new() },
         };
 
-        var action = new SetChangeAction<EditableObject>(obj, nameof(EditableObjectWithSet.EditableObjects), new EditableObject(), CollectionChangeActionType.Add);
+        var action = new TestSetChangeAction<EditableObject>(obj, nameof(EditableObjectWithSet.EditableObjects), new EditableObject(), CollectionChangeActionType.Add);
         AssertUndoRedoPropertyInClass(action, () => obj.EditableObjects);
     }
 
@@ -64,7 +64,7 @@ public class SetChangeActionTest : BasePropertyChangeActionTest
             EditableObjectInterfaces = new HashSet<IEditableObject> { new EditableObject() },
         };
 
-        var action = new SetChangeAction<IEditableObject>(obj, nameof(EditableObjectWithSet.EditableObjectInterfaces), new EditableObject(), CollectionChangeActionType.Add);
+        var action = new TestSetChangeAction<IEditableObject>(obj, nameof(EditableObjectWithSet.EditableObjectInterfaces), new EditableObject(), CollectionChangeActionType.Add);
         AssertUndoRedoPropertyInClass(action, () => obj.EditableObjectInterfaces);
     }
 
@@ -83,13 +83,51 @@ public class SetChangeActionTest : BasePropertyChangeActionTest
         public ISet<IEditableObject>? EditableObjectInterfaces { get; set; }
     }
 
-    protected override T GetUndoValue<T>(ChangeAction<T> action)
+    protected override TValue GetUndoValue<TProperty, TValue>(ChangeAction<TProperty> action) where TValue : default
     {
-        throw new NotImplementedException();
+        if (action is not TestSetChangeAction<TValue> changeAction)
+            throw new InvalidCastException();
+
+        if (changeAction.GetUndoValue() is not TValue value)
+            throw new InvalidCastException();
+
+        return value;
     }
 
-    protected override T GetRedoValue<T>(ChangeAction<T> action)
+    protected override TValue GetRedoValue<TProperty, TValue>(ChangeAction<TProperty> action) where TValue : default
     {
-        throw new NotImplementedException();
+        if (action is not TestSetChangeAction<TValue> changeAction)
+            throw new InvalidCastException();
+
+        if (changeAction.GetRedoValue() is not TValue value)
+            throw new InvalidCastException();
+
+        return value;
+    }
+
+    protected override void AssertValue<T>(T expected, T actual)
+    {
+        // as we already know that the this action will not change the instance in the property,
+        // so we can just change the elements in the set.
+        Assert.AreEqual(expected, actual);
+    }
+
+    // expose the testing property.
+    private class TestSetChangeAction<TValue> : SetChangeAction<TValue>
+    {
+        public TestSetChangeAction(IEditableObject editableObject, string propertyName, TValue value, CollectionChangeActionType actionType)
+            : base(editableObject, propertyName, value, actionType)
+        {
+        }
+
+        public new ICollection<TValue> GetUndoValue()
+        {
+            return new HashSet<TValue>();
+        }
+
+        public new ICollection<TValue> GetRedoValue()
+        {
+            return new HashSet<TValue>();
+        }
     }
 }
