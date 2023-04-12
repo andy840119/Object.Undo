@@ -196,19 +196,39 @@ public class PropertyChangeActionTest : BasePropertyChangeActionTest
 
     #endregion
 
-    protected override T GetUndoValue<T>(ChangeAction<T> action)
+    protected override TValue? GetUndoValue<TProperty, TValue>(ChangeAction<TProperty> action) where TValue : default
     {
-        if (action is not PropertyChangeAction<T> propertyChangeAction)
+        if (action is not PropertyChangeAction<TProperty> propertyChangeAction)
             throw new InvalidCastException();
 
-        return propertyChangeAction.OldValue!;
+        var oldValue = propertyChangeAction.OldValue;
+        if (oldValue is null)
+            return default;
+
+        if (oldValue is not TValue value)
+            throw new InvalidCastException();
+
+        return value;
     }
 
-    protected override T GetRedoValue<T>(ChangeAction<T> action)
+    protected override TValue? GetRedoValue<TProperty, TValue>(ChangeAction<TProperty> action) where TValue : default
     {
-        if (action is not PropertyChangeAction<T> propertyChangeAction)
+        if (action is not PropertyChangeAction<TProperty> propertyChangeAction)
             throw new InvalidCastException();
 
-        return propertyChangeAction.NewValue!;
+        var newValue = propertyChangeAction.NewValue;
+        if (newValue is null)
+            return default;
+
+        if (newValue is not TValue value)
+            throw new InvalidCastException();
+
+        return value;
+    }
+
+    protected override void AssertValue<T>(T expected, T actual)
+    {
+        // undo/redo value and the stored value should be the same instance.
+        Assert.AreSame(expected, actual);
     }
 }
